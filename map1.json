@@ -1,0 +1,32 @@
+{
+  "map": [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 2, 0, 0, 1, 0, 0, 0, 0, 1],
+    [1, 1, 1, 0, 1, 0, 1, 1, 0, 1],
+    [1, 4, 1, 0, 1, 0, 1, 0, 0, 1],
+    [1, 0, 1, 0, 7, 0, 1, 0, 1, 1],
+    [1, 0, 0, 0, 1, 1, 1, 0, 0, 1],
+    [1, 1, 1, 0, 1, 10, 0, 0, 0, 1],
+    [1, 8, 1, 5, 1, 1, 1, 1, 9, 1],
+    [1, 0, 0, 0, 0, 0, 6, 1, 0, 3],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  "inMap": {
+    "2": { "num": 2, "type": "start" },
+    "3": {
+      "num": 3,
+      "type": "warp",
+      "to": "second",
+      "color": "blue",
+      "correlation": 4
+    },
+    "4": { "num": 4, "type": "key", "color": "red" },
+    "5": { "num": 5, "type": "door", "color": "red" },
+    "6": { "num": 6, "type": "key", "color": "green" },
+    "7": { "num": 7, "type": "door", "color": "green" },
+    "8": { "num": 8, "type": "key", "color": "blue" },
+    "9": { "num": 9, "type": "door", "color": "blue" },
+    "10": { "num": 10, "type": "key", "color": "black" }
+  },
+  "solution": "rrddddlluuddrrdddrrrllluuuurlddddlludrruuuurruuurrrddldddrdulllrrrddr"
+}
