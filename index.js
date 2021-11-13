@@ -166,13 +166,13 @@ process.stdin.on('data', function (key) {
     process.exit()
   }
   if (key === 'w') tick({ y: -1 })
-  if (key === 's') tick({ y: +1 })
+  if (key === 's') tick({ y: 1 })
   if (key === 'a') tick({ x: -1 })
-  if (key === 'd') tick({ x: +1 })
+  if (key === 'd') tick({ x: 1 })
   if (key === '\x1B[A') tick({ y: -1 })
-  if (key === '\x1B[B') tick({ y: +1 })
+  if (key === '\x1B[B') tick({ y: 1 })
   if (key === '\x1B[D') tick({ x: -1 })
-  if (key === '\x1B[C') tick({ x: +1 })
+  if (key === '\x1B[C') tick({ x: 1 })
 })
 
 function tick ({ x = 0, y = 0 }) {
@@ -231,18 +231,11 @@ function testMap () {
   let i = 0
   const intervalID = setInterval(() => {
     const instruction = solution[i]
-    if (instruction === 'r') {
-      tick({ x: 1 })
-    }
-    if (instruction === 'l') {
-      tick({ x: -1 })
-    }
-    if (instruction === 'u') {
-      tick({ y: -1 })
-    }
-    if (instruction === 'd') {
-      tick({ y: 1 })
-    }
+
+    if (instruction === 'r') tick({ x: 1 })
+    if (instruction === 'l') tick({ x: -1 })
+    if (instruction === 'u') tick({ y: -1 })
+    if (instruction === 'd') tick({ y: 1 })
 
     i++
     if (solution.length === i) clearInterval(intervalID)
