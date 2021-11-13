@@ -2,18 +2,6 @@ const map1 = require('./map1.json')
 const map2 = require('./map2.json')
 const character = require('./character.json')
 
-// character.loc = findOne(map, 2)
-// const items = [
-//   { type: 'key', loc: findOne(map, 4), color: 'red' },
-//   { type: 'key', loc: findOne(map, 6), color: 'green' },
-//   { type: 'key', loc: findOne(map, 8), color: 'blue' }
-// ]
-// const doors = [
-//   { status: 'victory', loc: findOne(map, 3) },
-//   { status: 'locked', loc: findOne(map, 5), color: 'red' },
-//   { status: 'locked', loc: findOne(map, 7), color: 'green' },
-//   { status: 'locked', loc: findOne(map, 9), color: 'blue' }
-// ]
 const maps = {
   start: map1,
   second: map2
@@ -44,21 +32,11 @@ function loadMap () {
       const num = map[y][x]
       if (num !== 1 && num !== 0) {
         const obj = maps[mapID].inMap[num]
-        if (obj.type === 'door') {
-          doors.push({ ...obj, loc: { x, y } })
-        }
-        if (obj.type === 'key') {
-          items.push({ ...obj, loc: { x, y } })
-        }
-        if (obj.type === 'finish') {
-          finish = { loc: { x, y } }
-        }
-        if (obj.type === 'start') {
-          character.loc = { x, y }
-        }
-        if (obj.type === 'warp') {
-          warps.push({ ...obj, loc: { x, y } })
-        }
+        if (obj.type === 'door') doors.push({ ...obj, loc: { x, y } })
+        if (obj.type === 'key') items.push({ ...obj, loc: { x, y } })
+        if (obj.type === 'warp') warps.push({ ...obj, loc: { x, y } })
+        if (obj.type === 'finish') finish = { loc: { x, y } }
+        if (obj.type === 'start') character.loc = { x, y }
       }
     }
   }
@@ -114,13 +92,6 @@ function renderCell (x, y) {
   return ' '
 }
 
-// function loop (array, x, y) {
-//   for (let i = 0; i < array.length; i++) {
-//     if (collides(array[i], {x, y})) return array[i]
-//   }
-//   return false
-// }
-
 function renderInventory () {
   if (!character.inventory) return ''
   return colorize(character.inventory, '?')
@@ -129,40 +100,6 @@ function renderInventory () {
 function collides (obj, { x, y }) {
   return obj.loc.x === x && obj.loc.y === y
 }
-
-// determine character start location, and set it on player
-
-// function findOne (map, code) {
-//   for (let y = 0; y < map.length; ++y) {
-//     for (let x = 0; x < map[y].length; ++x) {
-//       if (map[y][x] === code) {
-//         return { x, y }
-//       }
-//     }
-//   }
-// }
-
-loadMap()
-drawMap()
-testMap()
-
-// console.log({ map, character })
-// 🚪 🔑 █ █
-
-process.stdin.setRawMode(true)
-process.stdin.resume()
-process.stdin.setEncoding('utf8')
-process.stdin.on('data', function (key) {
-  if (key === '\u0003') process.exit()
-  if (key === 'w') tick({ y: -1 })
-  if (key === 's') tick({ y: 1 })
-  if (key === 'a') tick({ x: -1 })
-  if (key === 'd') tick({ x: 1 })
-  if (key === '\x1B[A') tick({ y: -1 })
-  if (key === '\x1B[B') tick({ y: 1 })
-  if (key === '\x1B[D') tick({ x: -1 })
-  if (key === '\x1B[C') tick({ x: 1 })
-})
 
 function tick ({ x = 0, y = 0 }) {
   const newLoc = { x: character.loc.x + x, y: character.loc.y + y }
@@ -212,8 +149,6 @@ function tick ({ x = 0, y = 0 }) {
   drawMap()
 }
 
-//
-//
 // eslint-disable-next-line
 function testMap () {
   const solution = maps[mapID].solution.split('')
@@ -231,4 +166,21 @@ function testMap () {
   }, 9)
 }
 
-// hallo Dalanino and Hunter!!!
+process.stdin.setRawMode(true)
+process.stdin.resume()
+process.stdin.setEncoding('utf8')
+process.stdin.on('data', function (key) {
+  if (key === '\u0003') process.exit()
+  if (key === 'w') tick({ y: -1 })
+  if (key === 's') tick({ y: 1 })
+  if (key === 'a') tick({ x: -1 })
+  if (key === 'd') tick({ x: 1 })
+  if (key === '\x1B[A') tick({ y: -1 })
+  if (key === '\x1B[B') tick({ y: 1 })
+  if (key === '\x1B[D') tick({ x: -1 })
+  if (key === '\x1B[C') tick({ x: 1 })
+})
+
+loadMap()
+drawMap()
+testMap()
