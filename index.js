@@ -231,4 +231,4 @@ function testMap () {
   }, 9)
 }
 
-// hallo!!
+// hallo Dalanino!!
