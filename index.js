@@ -24,12 +24,12 @@ let items, doors, map, finish, warps
 
 function loadMap () {
   if (mapID in loadedMaps) {
-    const mapdata = loadedMaps[mapID]
-    map = mapdata.map
-    items = mapdata.items
-    doors = mapdata.doors
-    warps = mapdata.warps
-    finish = mapdata.finish
+    const mapData = loadedMaps[mapID]
+    map = mapData.map
+    items = mapData.items
+    doors = mapData.doors
+    warps = mapData.warps
+    finish = mapData.finish
     return
   }
 
@@ -54,7 +54,6 @@ function loadMap () {
           finish = { loc: { x, y } }
         }
         if (obj.type === 'start') {
-          // doors.push({ type: 'start', loc: { x, y } })
           character.loc = { x, y }
         }
         if (obj.type === 'warp') {
@@ -63,13 +62,7 @@ function loadMap () {
       }
     }
   }
-  loadedMaps[mapID] = {
-    doors,
-    items,
-    warps,
-    finish,
-    map
-  }
+  loadedMaps[mapID] = { doors, items, warps, finish, map }
 }
 
 const colors = {
@@ -106,25 +99,24 @@ function drawMap () {
 }
 
 function renderCell (x, y) {
-  if (collides(character, x, y)) return '☺'
-  if (finish && collides(finish, x, y)) return '⚐'
+  if (collides(character, { x, y })) return '☺'
+  if (finish && collides(finish, { x, y })) return '⚐'
   if (map[y][x] === 1) return '█'
-  // if (loop(items, x, y)) return colorize(items[i].color, '?')
-  for (let i = 0; i < items.length; i++) {
-    if (collides(items[i], x, y)) return colorize(items[i].color, '?')
+  for (const item of items) {
+    if (collides(item, { x, y })) return colorize(item.color, '?')
   }
-  for (let i = 0; i < doors.length; i++) {
-    if (collides(doors[i], x, y)) return colorize(doors[i].color, '*')
+  for (const door of doors) {
+    if (collides(door, { x, y })) return colorize(door.color, '*')
   }
-  for (let i = 0; i < warps.length; i++) {
-    if (collides(warps[i], x, y)) return colorize(warps[i].color, '⚘')
+  for (const warp of warps) {
+    if (collides(warp, { x, y })) return colorize(warp.color, '⚘')
   }
   return ' '
 }
 
 // function loop (array, x, y) {
 //   for (let i = 0; i < array.length; i++) {
-//     if (collides(array[i], x, y)) return array[i]
+//     if (collides(array[i], {x, y})) return array[i]
 //   }
 //   return false
 // }
@@ -135,7 +127,7 @@ function renderInventory () {
   } else return colorize(character.inventory.color, '?')
 }
 
-function collides (obj, x, y) {
+function collides (obj, { x, y }) {
   return obj.loc.x === x && obj.loc.y === y
 }
 
@@ -176,11 +168,11 @@ process.stdin.on('data', function (key) {
 })
 
 function tick ({ x = 0, y = 0 }) {
-  const newloc = { x: character.loc.x + x, y: character.loc.y + y }
-  if (map[newloc.y][newloc.x] === 1) return
-  if (newloc.y >= map.length || newloc.x >= map[0].length) return
+  const newLoc = { x: character.loc.x + x, y: character.loc.y + y }
+  if (map[newLoc.y][newLoc.x] === 1) return
+  if (newLoc.y >= map.length || newLoc.x >= map[0].length) return
 
-  const doorIndex = doors.findIndex(door => collides(door, newloc.x, newloc.y))
+  const doorIndex = doors.findIndex(door => collides(door, newLoc))
   if (doorIndex !== -1) {
     const door = doors[doorIndex]
     if (character.inventory?.color === door.color) {
@@ -191,7 +183,7 @@ function tick ({ x = 0, y = 0 }) {
     }
   }
 
-  const warp = warps.find(warp => collides(warp, newloc.x, newloc.y))
+  const warp = warps.find(warp => collides(warp, newLoc))
   if (warp) {
     mapID = warp.to
     loadMap()
@@ -203,23 +195,23 @@ function tick ({ x = 0, y = 0 }) {
     return
   }
 
-  if (finish && collides(finish, newloc.x, newloc.y)) {
-    character.loc = newloc
+  if (finish && collides(finish, newLoc)) {
+    character.loc = newLoc
     drawMap()
     console.log('\n\n\n                    YOU WIN!!!!!!\n\n\n')
     process.exit()
   }
 
-  const itemIndex = items.findIndex(item => collides(item, newloc.x, newloc.y))
+  const itemIndex = items.findIndex(item => collides(item, newLoc))
   if (itemIndex !== -1) {
     const [item] = items.splice(itemIndex, 1)
     if (character.inventory) {
-      items.push({ ...character.inventory, loc: newloc })
+      items.push({ ...character.inventory, loc: newLoc })
     }
     character.inventory = item
   }
 
-  character.loc = { ...newloc }
+  character.loc = { ...newLoc }
   drawMap()
 }
 
