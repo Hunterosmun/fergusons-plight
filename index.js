@@ -233,3 +233,5 @@ function testMap () {
     if (solution.length === i) clearInterval(intervalID)
   }, 9)
 }
+
+// hallo!!
