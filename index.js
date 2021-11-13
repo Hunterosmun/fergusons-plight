@@ -76,7 +76,7 @@ const colors = {
   cyan: msg => `\x1b[36m${msg}\x1b[0m`
 }
 
-function colorize (color, message) {
+function colorize ({ color }, message) {
   if (color in colors) {
     return colors[color](message)
   }
@@ -103,13 +103,13 @@ function renderCell (x, y) {
   if (finish && collides(finish, { x, y })) return '⚐'
   if (map[y][x] === 1) return '█'
   for (const item of items) {
-    if (collides(item, { x, y })) return colorize(item.color, '?')
+    if (collides(item, { x, y })) return colorize(item, '?')
   }
   for (const door of doors) {
-    if (collides(door, { x, y })) return colorize(door.color, '*')
+    if (collides(door, { x, y })) return colorize(door, '*')
   }
   for (const warp of warps) {
-    if (collides(warp, { x, y })) return colorize(warp.color, '⚘')
+    if (collides(warp, { x, y })) return colorize(warp, '⚘')
   }
   return ' '
 }
@@ -122,9 +122,8 @@ function renderCell (x, y) {
 // }
 
 function renderInventory () {
-  if (!character.inventory) {
-    return ''
-  } else return colorize(character.inventory.color, '?')
+  if (!character.inventory) return ''
+  return colorize(character.inventory, '?')
 }
 
 function collides (obj, { x, y }) {
@@ -154,9 +153,7 @@ process.stdin.setRawMode(true)
 process.stdin.resume()
 process.stdin.setEncoding('utf8')
 process.stdin.on('data', function (key) {
-  if (key === '\u0003') {
-    process.exit()
-  }
+  if (key === '\u0003') process.exit()
   if (key === 'w') tick({ y: -1 })
   if (key === 's') tick({ y: 1 })
   if (key === 'a') tick({ x: -1 })
