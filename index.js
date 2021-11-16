@@ -1,11 +1,16 @@
 const map1 = require('./map1.json')
 const map2 = require('./map2.json')
+const map3 = require('./map3.json')
+const map4 = require('./map4.json')
 const character = require('./character.json')
 
 const maps = {
   start: map1,
-  second: map2
+  second: map2,
+  third: map3,
+  fourth: map4
 }
+
 const loadedMaps = {}
 let mapID = 'start'
 let items, doors, map, finish, warps
@@ -163,7 +168,7 @@ function testMap () {
 
     i++
     if (solution.length === i) clearInterval(intervalID)
-  }, 9)
+  }, 20)
 }
 
 process.stdin.setRawMode(true)
@@ -183,4 +188,4 @@ process.stdin.on('data', function (key) {
 
 loadMap()
 drawMap()
-testMap()
+// testMap()
