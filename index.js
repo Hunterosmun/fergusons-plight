@@ -4,6 +4,8 @@ const map3 = require('./map3.json')
 const map4 = require('./map4.json')
 const character = require('./character.json')
 
+// hello hunter!!
+
 const maps = {
   start: map1,
   second: map2,
